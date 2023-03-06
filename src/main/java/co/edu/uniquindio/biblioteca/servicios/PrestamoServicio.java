@@ -1,6 +1,9 @@
 package co.edu.uniquindio.biblioteca.servicios;
 
-import co.edu.uniquindio.biblioteca.dto.PrestamoDTO;
+import co.edu.uniquindio.biblioteca.dto.ClienteGet;
+import co.edu.uniquindio.biblioteca.dto.ClientePost;
+import co.edu.uniquindio.biblioteca.dto.PrestamoDTOGet;
+import co.edu.uniquindio.biblioteca.dto.PrestamoDTOPost;
 import co.edu.uniquindio.biblioteca.entity.Cliente;
 import co.edu.uniquindio.biblioteca.entity.Libro;
 import co.edu.uniquindio.biblioteca.entity.Prestamo;
@@ -21,7 +24,7 @@ public class PrestamoServicio {
     private final PrestamoRepo prestamoRepo;
     private final ClienteRepo clienteRepo;
 
-    public Prestamo save(PrestamoDTO prestamoDTO){
+    public Prestamo save(PrestamoDTOPost prestamoDTO){
 
         long codigoCliente = prestamoDTO.clienteID();
         Optional<Cliente> consulta = clienteRepo.findById(codigoCliente);
@@ -54,7 +57,7 @@ public class PrestamoServicio {
 
 
     //TODO Completar
-    public List<PrestamoDTO> findByCodigoCliente(long codigoCliente){
+    public List<PrestamoDTOPost> findByCodigoCliente(long codigoCliente){
 
         return null;
     }
@@ -64,4 +67,21 @@ public class PrestamoServicio {
         return prestamoRepo.findById(codigoPrestamo).orElseThrow(()-> new RuntimeException("No existe"));
     }
 
+    public PrestamoDTOGet save(PrestamoDTOPost prestamo){
+
+        return convertir( prestamoRepo.save( convertir(prestamo) ) );
+    }
+
+    private PrestamoDTOGet convertir(Prestamo prestamo){
+        return new PrestamoDTOGet(prestamo.getCodigo(),prestamo.getFechaDevolucion(),prestamo.getFechaPrestamo(),prestamo.getCliente().getCodigo(),prestamo.getLibros());
+    }
+    /*
+    private Prestamo convertir(PrestamoDTOPost prestamo){
+        return Prestamo.builder()
+                .cliente(prestamo.clienteID())
+                .fechaDevolucion(prestamo.fechaDevolucion())
+                .libros(prestamo.isbnLibros()).build();
+    }
+    
+     */
 }

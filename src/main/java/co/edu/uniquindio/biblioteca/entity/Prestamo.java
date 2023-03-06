@@ -1,6 +1,7 @@
 package co.edu.uniquindio.biblioteca.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
@@ -29,4 +30,10 @@ public class Prestamo implements Serializable {
     @ManyToMany
     private List<Libro> libros;
 
+    @Builder
+    public Prestamo( Cliente cliente, LocalDateTime fechaDevolucion, List<Libro> libros) {
+        this.cliente = cliente;
+        this.fechaDevolucion = fechaDevolucion;
+        this.libros = libros;
+    }
 }

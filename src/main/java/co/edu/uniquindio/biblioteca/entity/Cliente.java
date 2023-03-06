@@ -19,7 +19,7 @@ public class Cliente implements Serializable {
     @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -30,11 +30,15 @@ public class Cliente implements Serializable {
     @OneToMany(mappedBy = "cliente")
     private List<Prestamo> prestamos;
 
+    @Column(nullable = false)
+    private boolean estado;
+
     @Builder
-    public Cliente(String nombre, String email, String telefono, String password) {
+    public Cliente(String nombre, String email, String telefono, String password, boolean estado) {
         this.nombre = nombre;
         this.email = email;
         this.telefono = telefono;
         this.password = password;
+        this.estado = estado;
     }
 }

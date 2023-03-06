@@ -12,4 +12,6 @@ public interface ClienteRepo extends JpaRepository<Cliente, Long> {
 
     Optional<Cliente> findByEmail(String email);
 
+    Optional<Cliente> findByEstado (boolean estado);
+
 }
