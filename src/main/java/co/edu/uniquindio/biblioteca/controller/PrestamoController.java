@@ -1,10 +1,7 @@
 package co.edu.uniquindio.biblioteca.controller;
 
-import co.edu.uniquindio.biblioteca.dto.ClienteGet;
-import co.edu.uniquindio.biblioteca.dto.ClientePost;
-import co.edu.uniquindio.biblioteca.dto.PrestamoDTOGet;
-import co.edu.uniquindio.biblioteca.dto.Respuesta;
-import co.edu.uniquindio.biblioteca.servicios.ClienteServicio;
+import co.edu.uniquindio.biblioteca.dto.*;
+import co.edu.uniquindio.biblioteca.entity.Prestamo;
 import co.edu.uniquindio.biblioteca.servicios.PrestamoServicio;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +18,7 @@ public class PrestamoController {
 
     private final PrestamoServicio prestamoServicio;
     @PostMapping
-    public ResponseEntity<Respuesta<PrestamoDTOGet>> save(@RequestBody PrestamoDTOGet prestamo){
-        return ResponseEntity.status(HttpStatus.CREATED).body( new Respuesta<>("Cliente creado correctamente", prestamoServicio.save(prestamo)) );
+    public ResponseEntity<Respuesta<Prestamo>> save(@RequestBody PrestamoDTOPost prestamo){
+        return ResponseEntity.status(HttpStatus.CREATED).body( new Respuesta<>("Prestamo creado correctamente", prestamoServicio.save(prestamo)) );
     }
 }

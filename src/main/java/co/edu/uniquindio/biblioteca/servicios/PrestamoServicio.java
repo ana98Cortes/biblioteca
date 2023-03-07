@@ -1,5 +1,6 @@
 package co.edu.uniquindio.biblioteca.servicios;
 
+import co.edu.uniquindio.biblioteca.controller.excepciones.ManejoExcepciones;
 import co.edu.uniquindio.biblioteca.dto.ClienteGet;
 import co.edu.uniquindio.biblioteca.dto.ClientePost;
 import co.edu.uniquindio.biblioteca.dto.PrestamoDTOGet;
@@ -8,14 +9,17 @@ import co.edu.uniquindio.biblioteca.entity.Cliente;
 import co.edu.uniquindio.biblioteca.entity.Libro;
 import co.edu.uniquindio.biblioteca.entity.Prestamo;
 import co.edu.uniquindio.biblioteca.repo.ClienteRepo;
+import co.edu.uniquindio.biblioteca.repo.LibroRepo;
 import co.edu.uniquindio.biblioteca.repo.PrestamoRepo;
 import co.edu.uniquindio.biblioteca.servicios.excepciones.ClienteNoEncontradoException;
+import co.edu.uniquindio.biblioteca.servicios.excepciones.LibroNoEncontradoException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -23,36 +27,13 @@ public class PrestamoServicio {
 
     private final PrestamoRepo prestamoRepo;
     private final ClienteRepo clienteRepo;
+    private final LibroRepo libroRepo;
 
     public Prestamo save(PrestamoDTOPost prestamoDTO){
 
-        long codigoCliente = prestamoDTO.clienteID();
-        Optional<Cliente> consulta = clienteRepo.findById(codigoCliente);
+        Prestamo prestamoDTOGet = convertir(prestamoDTO);
+        return prestamoRepo.save(prestamoDTOGet);
 
-        if(consulta.isEmpty()){
-            throw new ClienteNoEncontradoException("No existe");
-        }
-
-        Prestamo prestamo = new Prestamo();
-        prestamo.setCliente(consulta.get());
-        prestamo.setFechaPrestamo(LocalDateTime.now());
-
-        List<String> codigosLibros = prestamoDTO.isbnLibros();
-        List<Libro> libros = new ArrayList<>();
-
-        /*Optional<Libro> buscado libroRepo.findById(codigosLibros[0]);
-
-        if(buscado.isEmpty()){
-            throw new LibroNoExiste("El libro no existe");
-        }
-
-        libros.add( buscado );*/
-
-        //TODO Completar la parte de los libros
-        prestamo.setLibros(libros);
-        prestamo.setFechaDevolucion(prestamoDTO.fechaDevolucion());
-
-        return prestamoRepo.save(prestamo);
     }
 
 
@@ -67,21 +48,44 @@ public class PrestamoServicio {
         return prestamoRepo.findById(codigoPrestamo).orElseThrow(()-> new RuntimeException("No existe"));
     }
 
-    public PrestamoDTOGet save(PrestamoDTOPost prestamo){
-
-        return convertir( prestamoRepo.save( convertir(prestamo) ) );
+    private ClienteGet convertirCliente(Cliente cliente) {
+        return new ClienteGet(cliente.getCodigo(),cliente.getNombre(),cliente.getEmail(),cliente.getTelefono(),cliente.isEstado());
+    }
+/*
+    private PrestamoDTOGet convertir(Prestamo prestamo) {
+        return PrestamoDTOGet.builder()
+                .cliente(prestamo.getCliente())
+                .fechaPrestamo(prestamo.getFechaPrestamo())
+                .fechaDevolucion(prestamo.getFechaDevolucion())
+                .isbnLibros(prestamo.getLibros())
+                .build();
+    }
+*/
+    private Cliente obtenerCliente(long idCodigo){
+        return clienteRepo.findById(idCodigo).orElseThrow(() -> new ClienteNoEncontradoException("El cliente no existe"));
     }
 
-    private PrestamoDTOGet convertir(Prestamo prestamo){
-        return new PrestamoDTOGet(prestamo.getCodigo(),prestamo.getFechaDevolucion(),prestamo.getFechaPrestamo(),prestamo.getCliente().getCodigo(),prestamo.getLibros());
-    }
-    /*
-    private Prestamo convertir(PrestamoDTOPost prestamo){
+    private List<Libro> obtenerLibros(List<String> isbnLibros) {
+        List<Libro> libros = libroRepo.findAllById(isbnLibros);
+
+        if (libros.size() != isbnLibros.size()) {
+            String noEncontrados = isbnLibros
+                    .stream()
+                    .filter(isbn -> !libros.stream()
+                            .map(Libro::getIsbn).toList()
+                            .contains(isbn))
+                    .map(Object::toString)
+                    .collect(Collectors.joining(","));
+            throw new LibroNoEncontradoException("Los libros " + noEncontrados + " no existen");
+        }
+        return libros;
+        }
+
+    private Prestamo convertir(PrestamoDTOPost prestamoDTO) {
         return Prestamo.builder()
-                .cliente(prestamo.clienteID())
-                .fechaDevolucion(prestamo.fechaDevolucion())
-                .libros(prestamo.isbnLibros()).build();
+                .cliente(obtenerCliente(prestamoDTO.clienteID()))
+                .fechaDevolucion(prestamoDTO.fechaDevolucion())
+                .libros(obtenerLibros(prestamoDTO.isbnLibros()))
+                .build();
     }
-    
-     */
 }
