@@ -1,10 +1,7 @@
 package co.edu.uniquindio.biblioteca.servicios;
 
 import co.edu.uniquindio.biblioteca.controller.excepciones.ManejoExcepciones;
-import co.edu.uniquindio.biblioteca.dto.ClienteGet;
-import co.edu.uniquindio.biblioteca.dto.ClientePost;
-import co.edu.uniquindio.biblioteca.dto.PrestamoDTOGet;
-import co.edu.uniquindio.biblioteca.dto.PrestamoDTOPost;
+import co.edu.uniquindio.biblioteca.dto.*;
 import co.edu.uniquindio.biblioteca.entity.Cliente;
 import co.edu.uniquindio.biblioteca.entity.Libro;
 import co.edu.uniquindio.biblioteca.entity.Prestamo;
@@ -32,6 +29,7 @@ public class PrestamoServicio {
     public Prestamo save(PrestamoDTOPost prestamoDTO){
 
         Prestamo prestamoDTOGet = convertir(prestamoDTO);
+        prestamoDTOGet.setFechaPrestamo(LocalDateTime.now());
         return prestamoRepo.save(prestamoDTOGet);
 
     }
@@ -88,4 +86,29 @@ public class PrestamoServicio {
                 .libros(obtenerLibros(prestamoDTO.isbnLibros()))
                 .build();
     }
+//
+//    private PrestamoDTOGet convertir(Prestamo prestamo) {
+//        return PrestamoDTOGet.builder()
+//                .cliente(prestamo.getCliente())
+//                .fechaPrestamo(prestamo.getFechaPrestamo())
+//                .fechaDevolucion(prestamo.getFechaDevolucion())
+//                .isbnLibros(convertirLibro(prestamo.getLibros()))
+//                .build();
+//    }
+//    public List<LibroDTO> convertirLibros(List<Libro> libros) {
+//        return libros.stream()
+//                .map(item -> convertirLibro(item))
+//                .collect(Collectors.toList());
+//    }
+//
+//    private LibroDTO convertirLibro(Libro libro) {
+//        return LibroDTO.builder()
+//                .isbn(libro.getIsbn())
+//                .nombre(libro.getNombre())
+//                .genero(libro.getGenero())
+//                .unidades(libro.getUnidades())
+//                .autores(libro.getNombre())
+//                .fechaPublicacion(libro.getFechaPublicacion())
+//                .build();
+//    }
 }
