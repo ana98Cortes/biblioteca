@@ -30,7 +30,6 @@ public class ClienteController {
     @GetMapping
     public ResponseEntity<Respuesta<List<ClienteGet>>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body( new Respuesta<>("", clienteServicio.findAll()) );
-
     }
 
     @DeleteMapping("/{idCliente}")

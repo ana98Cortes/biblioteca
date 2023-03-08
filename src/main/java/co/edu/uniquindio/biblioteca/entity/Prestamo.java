@@ -1,5 +1,6 @@
 package co.edu.uniquindio.biblioteca.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -28,12 +29,17 @@ public class Prestamo implements Serializable {
     private LocalDateTime fechaDevolucion;
 
     @ManyToMany
+    @JsonIgnore
     private List<Libro> libros;
 
+    @Column(nullable = false)
+    private Boolean estado;
+
     @Builder
-    public Prestamo( Cliente cliente, LocalDateTime fechaDevolucion, List<Libro> libros) {
+    public Prestamo( Cliente cliente, LocalDateTime fechaDevolucion, List<Libro> libros, boolean estado) {
         this.cliente = cliente;
         this.fechaDevolucion = fechaDevolucion;
         this.libros = libros;
+        this.estado = estado;
     }
 }

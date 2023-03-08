@@ -1,5 +1,6 @@
 package co.edu.uniquindio.biblioteca.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -28,6 +29,7 @@ public class Cliente implements Serializable {
     private String password;
 
     @OneToMany(mappedBy = "cliente")
+    @JsonIgnore
     private List<Prestamo> prestamos;
 
     @Column(nullable = false)

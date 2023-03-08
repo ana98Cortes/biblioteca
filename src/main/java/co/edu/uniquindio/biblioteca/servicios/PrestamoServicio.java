@@ -10,6 +10,7 @@ import co.edu.uniquindio.biblioteca.repo.LibroRepo;
 import co.edu.uniquindio.biblioteca.repo.PrestamoRepo;
 import co.edu.uniquindio.biblioteca.servicios.excepciones.ClienteNoEncontradoException;
 import co.edu.uniquindio.biblioteca.servicios.excepciones.LibroNoEncontradoException;
+import co.edu.uniquindio.biblioteca.servicios.excepciones.PrestamoNoEncontrado;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -33,7 +34,29 @@ public class PrestamoServicio {
         return prestamoRepo.save(prestamoDTOGet);
 
     }
+    public List<PrestamoDTOGet> findAllByCliente(long clienteId) {
+        Cliente cliente = obtenerCliente(clienteId);
+        return convertirList(obtenerPrestamoPorCliente(cliente));
+    }
 
+    private List<Prestamo> obtenerPrestamoPorCliente(Cliente cliente) {
+        return prestamoRepo.findAllByCliente(cliente)
+                .orElseThrow(() -> new PrestamoNoEncontrado("El prestamo no existe"));
+    }
+
+    private List<PrestamoDTOGet> convertirList(List<Prestamo> prestamos) {
+        return prestamos.stream()
+                .filter(p -> p.getEstado())
+                .map(p -> convertir(p))
+                .collect(Collectors.toList());
+    }
+
+    public List<PrestamoDTOGet> findAll(){
+        return prestamoRepo.findAll()
+                .stream()
+                .map(c -> convertir(c))
+                .collect(Collectors.toList());
+    }
 
     //TODO Completar
     public List<PrestamoDTOPost> findByCodigoCliente(long codigoCliente){
@@ -49,6 +72,7 @@ public class PrestamoServicio {
     private ClienteGet convertirCliente(Cliente cliente) {
         return new ClienteGet(cliente.getCodigo(),cliente.getNombre(),cliente.getEmail(),cliente.getTelefono(),cliente.isEstado());
     }
+
 /*
     private PrestamoDTOGet convertir(Prestamo prestamo) {
         return PrestamoDTOGet.builder()
@@ -84,6 +108,16 @@ public class PrestamoServicio {
                 .cliente(obtenerCliente(prestamoDTO.clienteID()))
                 .fechaDevolucion(prestamoDTO.fechaDevolucion())
                 .libros(obtenerLibros(prestamoDTO.isbnLibros()))
+                .estado(prestamoDTO.estado())
+                .build();
+    }
+
+    private PrestamoDTOGet convertir(Prestamo prestamo) {
+        return PrestamoDTOGet.builder()
+                .cliente(prestamo.getCliente())
+                .fechaDevolucion(prestamo.getFechaDevolucion())
+                .isbnLibros(prestamo.getLibros())
+                .estado(prestamo.getEstado())
                 .build();
     }
 //

@@ -20,7 +20,6 @@ public class ClienteServicio {
         return convertir( clienteRepo.save( convertir(cliente) ) );
     }
 
-
     public ClienteGet findById(Long codigoCliente){
         Cliente cliente = obtenerCliente(codigoCliente);
         if(cliente.isEstado()==false){
