@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,4 +35,11 @@ public class PrestamoController {
         return ResponseEntity.status(HttpStatus.OK).body( new Respuesta<>("", prestamoServicio.listaPrestamoPorIdCliente(idCliente)));
     }
 
+    @GetMapping("/listaPrestamoFecha")
+    public ResponseEntity<Respuesta<Optional<List<Prestamo>>>> findByFechaPrestamo(@RequestParam String fechaPrestamo) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(fechaPrestamo, formatter);
+        return ResponseEntity.status(HttpStatus.OK).body(new Respuesta<>("", prestamoServicio.findByFechaPrestamo(dateTime)));
+    }
 }

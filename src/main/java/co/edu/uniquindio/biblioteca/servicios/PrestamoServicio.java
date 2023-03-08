@@ -125,6 +125,10 @@ public class PrestamoServicio {
         return prestamoRepo.listaPrestamoPorIdCliente(idCliente);
     }
 
+    public Optional<List<Prestamo>> findByFechaPrestamo(LocalDateTime fechaPrestamo ){
+        return prestamoRepo.findByFechaPrestamo(fechaPrestamo);
+    }
+
 //
 //    private PrestamoDTOGet convertir(Prestamo prestamo) {
 //        return PrestamoDTOGet.builder()

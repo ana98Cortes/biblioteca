@@ -1,5 +1,6 @@
 package co.edu.uniquindio.biblioteca.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -23,9 +24,11 @@ public class Prestamo implements Serializable {
     private Cliente cliente;
 
     @Column(nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="America/Bogota")
     private LocalDateTime fechaPrestamo;
 
     @Column(nullable = false)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="America/Bogota")
     private LocalDateTime fechaDevolucion;
 
     @ManyToMany
