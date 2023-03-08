@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/prestamo")
@@ -24,6 +25,11 @@ public class PrestamoController {
     @GetMapping
     public ResponseEntity<Respuesta<List<PrestamoDTOGet>>> findAll(){
         return ResponseEntity.status(HttpStatus.OK).body( new Respuesta<>("", prestamoServicio.findAll()));
+    }
+
+    @GetMapping("/listaPrestamoIdCliente")
+    public ResponseEntity<Respuesta<Optional<List<Prestamo>>>> findAllidCliente(@RequestParam Long idCliente){
+        return ResponseEntity.status(HttpStatus.OK).body( new Respuesta<>("", prestamoServicio.listaPrestamoPorIdCliente(idCliente)));
     }
 
 }

@@ -120,6 +120,11 @@ public class PrestamoServicio {
                 .estado(prestamo.getEstado())
                 .build();
     }
+
+    public Optional<List<Prestamo>> listaPrestamoPorIdCliente(Long idCliente){
+        return prestamoRepo.listaPrestamoPorIdCliente(idCliente);
+    }
+
 //
 //    private PrestamoDTOGet convertir(Prestamo prestamo) {
 //        return PrestamoDTOGet.builder()

@@ -22,4 +22,7 @@ public interface PrestamoRepo extends JpaRepository<Prestamo, Long> {
 
     @Query("SELECT COUNT(p) FROM Prestamo p JOIN p.libros l WHERE l.isbn = :isbn")
     int countByIsbn(@Param("isbn") String isbn);
+
+    @Query("Select p from Prestamo p inner join Cliente c on c.codigo = p.cliente.codigo where c.codigo = ?1")
+    Optional<List<Prestamo>> listaPrestamoPorIdCliente(Long idCliente);
 }
