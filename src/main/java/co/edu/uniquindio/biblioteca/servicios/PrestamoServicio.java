@@ -75,16 +75,6 @@ public class PrestamoServicio {
         return new ClienteGet(cliente.getCodigo(),cliente.getNombre(),cliente.getEmail(),cliente.getTelefono(),cliente.isEstado());
     }
 
-/*
-    private PrestamoDTOGet convertir(Prestamo prestamo) {
-        return PrestamoDTOGet.builder()
-                .cliente(prestamo.getCliente())
-                .fechaPrestamo(prestamo.getFechaPrestamo())
-                .fechaDevolucion(prestamo.getFechaDevolucion())
-                .isbnLibros(prestamo.getLibros())
-                .build();
-    }
-*/
     private Cliente obtenerCliente(long idCodigo){
         return clienteRepo.findById(idCodigo).orElseThrow(() -> new ClienteNoEncontradoException("El cliente no existe"));
     }
@@ -128,32 +118,11 @@ public class PrestamoServicio {
     }
 
     public Optional<List<Prestamo>> findByFechaPrestamo(LocalDate fechaPrestamo ){
-        return prestamoRepo.findByFechaPrestamos(fechaPrestamo);
+        return prestamoRepo.findByFechaPrestamo(fechaPrestamo);
     }
 
-//
-//    private PrestamoDTOGet convertir(Prestamo prestamo) {
-//        return PrestamoDTOGet.builder()
-//                .cliente(prestamo.getCliente())
-//                .fechaPrestamo(prestamo.getFechaPrestamo())
-//                .fechaDevolucion(prestamo.getFechaDevolucion())
-//                .isbnLibros(convertirLibro(prestamo.getLibros()))
-//                .build();
-//    }
-//    public List<LibroDTO> convertirLibros(List<Libro> libros) {
-//        return libros.stream()
-//                .map(item -> convertirLibro(item))
-//                .collect(Collectors.toList());
-//    }
-//
-//    private LibroDTO convertirLibro(Libro libro) {
-//        return LibroDTO.builder()
-//                .isbn(libro.getIsbn())
-//                .nombre(libro.getNombre())
-//                .genero(libro.getGenero())
-//                .unidades(libro.getUnidades())
-//                .autores(libro.getNombre())
-//                .fechaPublicacion(libro.getFechaPublicacion())
-//                .build();
-//    }
+    public Optional<List<Prestamo>> findPrestamoByIsbn(String isbn){
+        return prestamoRepo.findPrestamoByIsbn(isbn);
+    }
+
 }

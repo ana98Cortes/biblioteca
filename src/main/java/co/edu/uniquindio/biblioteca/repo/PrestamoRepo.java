@@ -27,7 +27,10 @@ public interface PrestamoRepo extends JpaRepository<Prestamo, Long> {
     @Query("Select p from Prestamo p inner join Cliente c on c.codigo = p.cliente.codigo where c.codigo = ?1")
     Optional<List<Prestamo>> listaPrestamoPorIdCliente(Long idCliente);
 
-    //select * from prestamo p where p.fecha_prestamo LIKE '2023-03-08%';
-    @Query("select p from Prestamo p where p.fechaPrestamo =?1 ")
-    Optional<List<Prestamo>> findByFechaPrestamos(LocalDate fechaPrestamo);
+    Optional<List<Prestamo>> findByFechaPrestamo(LocalDate fechaPrestamo);
+
+
+    @Query("select p from Prestamo p JOIN p.libros l WHERE l.isbn = ?1")
+    Optional<List<Prestamo>> findPrestamoByIsbn(String isbn);
+
 }

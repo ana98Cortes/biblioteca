@@ -33,7 +33,6 @@ public class Prestamo implements Serializable {
     private LocalDateTime fechaDevolucion;
 
     @ManyToMany
-    @JsonIgnore
     private List<Libro> libros;
 
     @Column(nullable = false)

@@ -36,10 +36,20 @@ public class PrestamoController {
         return ResponseEntity.status(HttpStatus.OK).body( new Respuesta<>("", prestamoServicio.listaPrestamoPorIdCliente(idCliente)));
     }
 
-    @GetMapping("/listaPrestamoFecha")
-    public ResponseEntity<Respuesta<Optional<List<Prestamo>>>> findByFechaPrestamo(@RequestParam String fechaPrestamo) {
+    @GetMapping("/listaPrestamoFecha/{fechaPrestamo}")
+    public ResponseEntity<Respuesta<Optional<List<Prestamo>>>> findByFechaPrestamo(@PathVariable String fechaPrestamo) {
 
         LocalDate dateTime = LocalDate.parse(fechaPrestamo);
         return ResponseEntity.status(HttpStatus.OK).body(new Respuesta<>("", prestamoServicio.findByFechaPrestamo(dateTime)));
     }
+
+    @GetMapping("/listaPrestamoIsbn/{isbn}")
+    public ResponseEntity<Respuesta<Optional<List<Prestamo>>>> findPrestamoByIsbn(@PathVariable String isbn){
+        return ResponseEntity.status(HttpStatus.OK).body( new Respuesta<>("", prestamoServicio.findPrestamoByIsbn(isbn)));
+    }
+
+//    @GetMapping("/libro/{isbn}/contar")
+//    public ResponseEntity<Respuesta<Optional<List<Prestamo>>>> findById(@PathVariable String isbn) {
+//        return ResponseEntity.status(HttpStatus.OK).body( new Respuesta<>("OK", prestamoServicio.lendingCount(isbn)));
+//    }
 }
