@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -28,5 +29,5 @@ public interface PrestamoRepo extends JpaRepository<Prestamo, Long> {
 
     //select * from prestamo p where p.fecha_prestamo LIKE '2023-03-08%';
     @Query("select p from Prestamo p where p.fechaPrestamo =?1 ")
-    Optional<List<Prestamo>> findByFechaPrestamo(LocalDateTime fechaPrestamo);
+    Optional<List<Prestamo>> findByFechaPrestamos(LocalDate fechaPrestamo);
 }

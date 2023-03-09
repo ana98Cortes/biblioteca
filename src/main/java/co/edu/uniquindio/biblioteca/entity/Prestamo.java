@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,8 +25,8 @@ public class Prestamo implements Serializable {
     private Cliente cliente;
 
     @Column(nullable = false)
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="America/Bogota")
-    private LocalDateTime fechaPrestamo;
+    @JsonFormat(pattern="yyyy-MM-dd", timezone="America/Bogota")
+    private LocalDate fechaPrestamo;
 
     @Column(nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="America/Bogota")

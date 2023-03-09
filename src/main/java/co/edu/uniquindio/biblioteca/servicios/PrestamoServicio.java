@@ -13,6 +13,8 @@ import co.edu.uniquindio.biblioteca.servicios.excepciones.LibroNoEncontradoExcep
 import co.edu.uniquindio.biblioteca.servicios.excepciones.PrestamoNoEncontrado;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +32,7 @@ public class PrestamoServicio {
     public Prestamo save(PrestamoDTOPost prestamoDTO){
 
         Prestamo prestamoDTOGet = convertir(prestamoDTO);
-        prestamoDTOGet.setFechaPrestamo(LocalDateTime.now());
+        prestamoDTOGet.setFechaPrestamo(LocalDate.now());
         return prestamoRepo.save(prestamoDTOGet);
 
     }
@@ -125,8 +127,8 @@ public class PrestamoServicio {
         return prestamoRepo.listaPrestamoPorIdCliente(idCliente);
     }
 
-    public Optional<List<Prestamo>> findByFechaPrestamo(LocalDateTime fechaPrestamo ){
-        return prestamoRepo.findByFechaPrestamo(fechaPrestamo);
+    public Optional<List<Prestamo>> findByFechaPrestamo(LocalDate fechaPrestamo ){
+        return prestamoRepo.findByFechaPrestamos(fechaPrestamo);
     }
 
 //
